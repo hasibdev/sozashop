@@ -1,0 +1,41 @@
+stages:
+  - test
+  - build
+  - dev
+
+test:
+  stage: test
+  only:
+    - test
+  before_script:
+    - cd /var/www/html/test.sozashop.com
+
+  script:
+    - echo "Test Stage"
+    - whoami
+    - pwd
+    - git branch
+    - git stash
+    - git pull
+    - npm install
+    - npm run build
+    - pm2 reload test.sozashop.com --force
+
+build:
+  stage: build
+  only:
+    - master
+  before_script:
+    - cd /var/www/html/sozashop.com
+
+  script:
+    - echo "Build Stage"
+    - whoami
+    - pwd
+    - git branch
+    - git stash
+    - git pull
+    - yarn
+    - yarn build
+    - pm2 reload sozashop.com --force
+
